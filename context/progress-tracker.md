@@ -14,6 +14,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 - Next.js boilerplate cleanup
 - `01-design-system.md` — shadcn/ui setup, UI primitives, `cn()` helper, dark theme
+- `02-editor.md` — editor navbar, project sidebar shell, dialog pattern
 
 ## In Progress
 
@@ -33,4 +34,5 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Session Notes
 
-- None
+- Editor chrome uses overlay sidebar (no layout shift) with navbar toggle controlling open state
+- Dialog pattern wraps shadcn primitives with design tokens; feature dialogs deferred
