@@ -39,7 +39,7 @@ export default function RootLayout({
               colorPrimary: 'var(--accent-primary)',
               colorNeutral: 'var(--text-muted)',
               colorDanger: 'var(--state-error)',
-              fontFamily: 'var(--font-geist-sans)',
+              fontFamily: 'inherit',
               borderRadius: '0.75rem',
             },
           }}
