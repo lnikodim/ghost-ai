@@ -16,6 +16,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - `01-design-system.md` — shadcn/ui setup, UI primitives, `cn()` helper, dark theme
 - `02-editor.md` — editor navbar, project sidebar shell, dialog pattern
 - `03-auth.md` — Clerk wired into Next.js: ClerkProvider with dark theme, protected-first middleware in `proxy.ts`, sign-in/sign-up pages with two-panel layout, root redirect, UserButton in editor navbar
+- `04-project-dialogs.md` — editor home screen, create/rename/delete project dialogs, sidebar project items with owner-only actions, mobile backdrop scrim, `useProjectDialogs` hook, mock project data
 
 ## In Progress
 
@@ -35,6 +36,10 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Session Notes
 
+- Editor home screen shows centered heading + description + New Project button (no card wrapper)
+- `useProjectDialogs` hook owns all dialog/form/loading state; slug derived from name via `toSlug()` helper
+- Sidebar project items use `DropdownMenuTrigger` with `buttonVariants` styling (base-ui doesn't support `asChild`)
+- Mobile scrim: `fixed inset-0 bg-black/50 md:hidden` rendered conditionally when sidebar is open; tap closes sidebar
 - Editor chrome uses overlay sidebar (no layout shift) with navbar toggle controlling open state
 - Dialog pattern wraps shadcn primitives with design tokens; feature dialogs deferred
 - Auth uses protected-first strategy: all routes blocked except `/sign-in` and `/sign-up` (resolved from env vars)
