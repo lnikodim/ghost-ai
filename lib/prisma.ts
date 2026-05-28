@@ -4,6 +4,14 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+/**
+ * Replaces ambiguous SSL modes with 'verify-full' to match the current pg
+ * behavior and suppress the pg-connection-string deprecation warning.
+ */
+function normalizeSslMode(url: string): string {
+  return url.replace(/sslmode=(prefer|require|verify-ca)/, 'sslmode=verify-full');
+}
+
 function createPrismaClient(): PrismaClient {
   const url = process.env.DATABASE_URL ?? '';
 
@@ -15,7 +23,7 @@ function createPrismaClient(): PrismaClient {
   }
 
   const { PrismaPg } = require('@prisma/adapter-pg');
-  const adapter = new PrismaPg({ connectionString: url });
+  const adapter = new PrismaPg({ connectionString: normalizeSslMode(url) });
   return new PrismaClient({ adapter });
 }
 

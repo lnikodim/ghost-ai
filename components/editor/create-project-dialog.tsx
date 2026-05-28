@@ -8,7 +8,7 @@ interface CreateProjectDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   name: string;
-  slug: string;
+  roomId: string;
   isLoading: boolean;
   onNameChange: (value: string) => void;
   onSubmit: () => void;
@@ -18,7 +18,7 @@ export function CreateProjectDialog({
   open,
   onOpenChange,
   name,
-  slug,
+  roomId,
   isLoading,
   onNameChange,
   onSubmit,
@@ -52,7 +52,7 @@ export function CreateProjectDialog({
         />
         {name.trim() ? (
           <p className="text-xs text-copy-muted">
-            Slug: <span className="font-mono text-copy-secondary">{slug || '—'}</span>
+            Room ID: <span className="font-mono text-copy-secondary">{roomId || '—'}</span>
           </p>
         ) : null}
       </div>

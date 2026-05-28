@@ -11,22 +11,23 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
-import type { MockProject } from '@/lib/mock-projects';
-import { MOCK_PROJECTS } from '@/lib/mock-projects';
+import type { Project } from '@/lib/projects';
 
 interface ProjectSidebarProps {
   isOpen: boolean;
   onClose: () => void;
   onCreateProject: () => void;
-  onRenameProject: (project: MockProject) => void;
-  onDeleteProject: (project: MockProject) => void;
+  onRenameProject: (project: Project) => void;
+  onDeleteProject: (project: Project) => void;
+  ownedProjects: Project[];
+  sharedProjects: Project[];
   className?: string;
 }
 
 interface ProjectItemProps {
-  project: MockProject;
-  onRename: (project: MockProject) => void;
-  onDelete: (project: MockProject) => void;
+  project: Project;
+  onRename: (project: Project) => void;
+  onDelete: (project: Project) => void;
 }
 
 function ProjectItem({ project, onRename, onDelete }: ProjectItemProps) {
@@ -75,14 +76,12 @@ export function ProjectSidebar({
   onCreateProject,
   onRenameProject,
   onDeleteProject,
+  ownedProjects,
+  sharedProjects,
   className,
 }: ProjectSidebarProps) {
-  const ownedProjects = MOCK_PROJECTS.filter((p) => p.isOwner);
-  const sharedProjects = MOCK_PROJECTS.filter((p) => !p.isOwner);
-
   return (
     <>
-      {/* Mobile backdrop scrim */}
       {isOpen ? (
         <div aria-hidden="true" className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={onClose} />
       ) : null}

@@ -18,6 +18,8 @@ Update this file whenever the current phase, active feature, or implementation s
 - `03-auth.md` — Clerk wired into Next.js: ClerkProvider with dark theme, protected-first middleware in `proxy.ts`, sign-in/sign-up pages with two-panel layout, root redirect, UserButton in editor navbar
 - `04-project-dialogs.md` — editor home screen, create/rename/delete project dialogs, sidebar project items with owner-only actions, mobile backdrop scrim, `useProjectDialogs` hook, mock project data
 - `05-prisma.md` — `Project` and `ProjectCollaborator` models, `lib/prisma.ts` singleton with URL-based branching (Accelerate vs direct pg), migration `20260526182516_init_projects`, client generated to `app/egenerated/prisma`
+- `06-project-apis.md` — REST API routes for projects: `GET /api/projects`, `POST /api/projects`, `PATCH /api/projects/[projectId]`, `DELETE /api/projects/[projectId]`; owner-only enforcement for mutations; 401/403 responses
+- `07-wire-editor-home.md` — editor home wired to real project data: `lib/projects.ts` server-side data helper, `useProjectActions` hook with real API calls and navigation, server component page fetching owned + shared projects, `EditorHomeClient` client shell, create dialog shows room ID preview, rename pre-fills name, delete redirects to `/editor` if active workspace
 
 ## In Progress
 
@@ -49,3 +51,6 @@ Update this file whenever the current phase, active feature, or implementation s
 - Prisma v7: driver adapters are required; `prisma-client` generator with explicit output path `app/egenerated/prisma`
 - `lib/prisma.ts` branches on `DATABASE_URL` prefix — `prisma+postgres://` uses Accelerate extension, all other URLs use `@prisma/adapter-pg` directly
 - Global singleton cached on `globalThis` for hot-reload safety in development
+- `useProjectActions` hook pre-generates a random suffix when the create dialog opens so the room ID preview is stable; room ID = `slug-suffix` passed as custom `id` to `POST /api/projects` to keep project ID and Liveblocks room ID aligned
+- Shared projects fetched via `ProjectCollaborator.email` matched against the current Clerk user's primary email
+- Editor page is a server component; interactive shell extracted to `app/editor/_components/editor-home-client.tsx`
