@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { MoreHorizontal, Pencil, Plus, Trash2, X } from 'lucide-react';
 
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -21,19 +22,33 @@ interface ProjectSidebarProps {
   onDeleteProject: (project: Project) => void;
   ownedProjects: Project[];
   sharedProjects: Project[];
+  activeProjectId?: string;
   className?: string;
 }
 
 interface ProjectItemProps {
   project: Project;
+  isActive: boolean;
+  onClose: () => void;
   onRename: (project: Project) => void;
   onDelete: (project: Project) => void;
 }
 
-function ProjectItem({ project, onRename, onDelete }: ProjectItemProps) {
+function ProjectItem({ project, isActive, onClose, onRename, onDelete }: ProjectItemProps) {
   return (
-    <div className="group flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-elevated">
-      <span className="min-w-0 flex-1 truncate text-sm text-copy-secondary">{project.name}</span>
+    <div
+      className={cn('group flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-elevated', isActive && 'bg-elevated')}
+    >
+      <Link
+        href={`/editor/${project.id}`}
+        onClick={onClose}
+        className={cn(
+          'min-w-0 flex-1 truncate text-sm',
+          isActive ? 'font-medium text-copy-primary' : 'text-copy-secondary',
+        )}
+      >
+        {project.name}
+      </Link>
 
       {project.isOwner ? (
         <DropdownMenu>
@@ -78,6 +93,7 @@ export function ProjectSidebar({
   onDeleteProject,
   ownedProjects,
   sharedProjects,
+  activeProjectId,
   className,
 }: ProjectSidebarProps) {
   return (
@@ -114,6 +130,8 @@ export function ProjectSidebar({
                   <ProjectItem
                     key={project.id}
                     project={project}
+                    isActive={project.id === activeProjectId}
+                    onClose={onClose}
                     onRename={onRenameProject}
                     onDelete={onDeleteProject}
                   />
@@ -131,6 +149,8 @@ export function ProjectSidebar({
                   <ProjectItem
                     key={project.id}
                     project={project}
+                    isActive={project.id === activeProjectId}
+                    onClose={onClose}
                     onRename={onRenameProject}
                     onDelete={onDeleteProject}
                   />

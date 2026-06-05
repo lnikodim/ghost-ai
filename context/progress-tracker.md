@@ -20,6 +20,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - `05-prisma.md` — `Project` and `ProjectCollaborator` models, `lib/prisma.ts` singleton with URL-based branching (Accelerate vs direct pg), migration `20260526182516_init_projects`, client generated to `app/egenerated/prisma`
 - `06-project-apis.md` — REST API routes for projects: `GET /api/projects`, `POST /api/projects`, `PATCH /api/projects/[projectId]`, `DELETE /api/projects/[projectId]`; owner-only enforcement for mutations; 401/403 responses
 - `07-wire-editor-home.md` — editor home wired to real project data: `lib/projects.ts` server-side data helper, `useProjectActions` hook with real API calls and navigation, server component page fetching owned + shared projects, `EditorHomeClient` client shell, create dialog shows room ID preview, rename pre-fills name, delete redirects to `/editor` if active workspace
+- `08-editor-workspace-shell.md` — `/editor/[roomId]` server component with Clerk access checks, `lib/project-access.ts` helpers, `AccessDenied` component, workspace layout with project name navbar, share/AI sidebar toggles, canvas placeholder, highlighted active project in sidebar
 
 ## In Progress
 
@@ -54,3 +55,6 @@ Update this file whenever the current phase, active feature, or implementation s
 - `useProjectActions` hook pre-generates a random suffix when the create dialog opens so the room ID preview is stable; room ID = `slug-suffix` passed as custom `id` to `POST /api/projects` to keep project ID and Liveblocks room ID aligned
 - Shared projects fetched via `ProjectCollaborator.email` matched against the current Clerk user's primary email
 - Editor page is a server component; interactive shell extracted to `app/editor/_components/editor-home-client.tsx`
+- `lib/project-access.ts` provides `getCurrentClerkIdentity()` and `getProjectAccess()` for server-side workspace authorization
+- `/editor/[roomId]` redirects unauthenticated users to `/sign-in`; missing or unauthorized projects render `AccessDenied`
+- Workspace shell: navbar shows project name + share/AI toggles, canvas placeholder fills viewport, AI sidebar is a slide-over placeholder
