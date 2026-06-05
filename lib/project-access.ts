@@ -13,7 +13,7 @@ export interface AccessibleProject {
 }
 
 export type ProjectAccessResult =
-  | { status: 'granted'; project: AccessibleProject }
+  | { status: 'granted'; project: AccessibleProject; isOwner: boolean }
   | { status: 'not_found' }
   | { status: 'denied' };
 
@@ -38,7 +38,11 @@ export async function getProjectAccess(projectId: string, identity: ClerkIdentit
   }
 
   if (project.ownerId === identity.userId) {
-    return { status: 'granted', project: { id: project.id, name: project.name } };
+    return {
+      status: 'granted',
+      project: { id: project.id, name: project.name },
+      isOwner: true,
+    };
   }
 
   if (identity.email) {
@@ -47,7 +51,11 @@ export async function getProjectAccess(projectId: string, identity: ClerkIdentit
     });
 
     if (collaborator) {
-      return { status: 'granted', project: { id: project.id, name: project.name } };
+      return {
+        status: 'granted',
+        project: { id: project.id, name: project.name },
+        isOwner: false,
+      };
     }
   }
 

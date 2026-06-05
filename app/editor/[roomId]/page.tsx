@@ -26,5 +26,12 @@ export default async function EditorWorkspacePage({ params }: EditorWorkspacePag
 
   const { owned, shared } = await getProjectsForUser();
 
-  return <EditorWorkspaceClient project={access.project} ownedProjects={owned} sharedProjects={shared} />;
+  return (
+    <EditorWorkspaceClient
+      project={access.project}
+      isOwner={access.isOwner}
+      ownedProjects={owned}
+      sharedProjects={shared}
+    />
+  );
 }

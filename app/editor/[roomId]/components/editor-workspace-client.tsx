@@ -8,6 +8,7 @@ import { ProjectSidebar } from '@/components/editor/project-sidebar';
 import { CreateProjectDialog } from '@/components/editor/create-project-dialog';
 import { RenameProjectDialog } from '@/components/editor/rename-project-dialog';
 import { DeleteProjectDialog } from '@/components/editor/delete-project-dialog';
+import { ShareProjectDialog } from '@/components/editor/share-project-dialog';
 import { Button } from '@/components/ui/button';
 import { useProjectActions } from '@/hooks/use-project-actions';
 import type { AccessibleProject } from '@/lib/project-access';
@@ -16,13 +17,15 @@ import { cn } from '@/lib/utils';
 
 interface EditorWorkspaceClientProps {
   project: AccessibleProject;
+  isOwner: boolean;
   ownedProjects: Project[];
   sharedProjects: Project[];
 }
 
-export function EditorWorkspaceClient({ project, ownedProjects, sharedProjects }: EditorWorkspaceClientProps) {
+export function EditorWorkspaceClient({ project, isOwner, ownedProjects, sharedProjects }: EditorWorkspaceClientProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
 
   const {
     mode,
@@ -46,6 +49,7 @@ export function EditorWorkspaceClient({ project, ownedProjects, sharedProjects }
         projectName={project.name}
         isAiSidebarOpen={isAiSidebarOpen}
         onToggleAiSidebar={() => setIsAiSidebarOpen((prev) => !prev)}
+        onShareClick={() => setIsShareDialogOpen(true)}
       />
 
       <ProjectSidebar
@@ -132,6 +136,13 @@ export function EditorWorkspaceClient({ project, ownedProjects, sharedProjects }
         projectName={activeProject?.name ?? ''}
         isLoading={isLoading}
         onConfirm={handleSubmit}
+      />
+
+      <ShareProjectDialog
+        open={isShareDialogOpen}
+        onOpenChange={setIsShareDialogOpen}
+        projectId={project.id}
+        isOwner={isOwner}
       />
     </div>
   );

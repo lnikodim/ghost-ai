@@ -12,6 +12,7 @@ interface EditorNavbarProps {
   projectName?: string;
   isAiSidebarOpen?: boolean;
   onToggleAiSidebar?: () => void;
+  onShareClick?: () => void;
   className?: string;
 }
 
@@ -21,6 +22,7 @@ export function EditorNavbar({
   projectName,
   isAiSidebarOpen = false,
   onToggleAiSidebar,
+  onShareClick,
   className,
 }: EditorNavbarProps) {
   const isWorkspace = Boolean(projectName);
@@ -52,7 +54,7 @@ export function EditorNavbar({
       <div className="flex flex-1 items-center justify-end gap-1 px-3">
         {isWorkspace ? (
           <>
-            <Button type="button" variant="ghost" size="sm" aria-label="Share project">
+            <Button type="button" variant="ghost" size="sm" aria-label="Share project" onClick={onShareClick}>
               <Share2 className="h-4 w-4" />
               Share
             </Button>

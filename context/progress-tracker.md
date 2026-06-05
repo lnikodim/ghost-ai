@@ -21,6 +21,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - `06-project-apis.md` — REST API routes for projects: `GET /api/projects`, `POST /api/projects`, `PATCH /api/projects/[projectId]`, `DELETE /api/projects/[projectId]`; owner-only enforcement for mutations; 401/403 responses
 - `07-wire-editor-home.md` — editor home wired to real project data: `lib/projects.ts` server-side data helper, `useProjectActions` hook with real API calls and navigation, server component page fetching owned + shared projects, `EditorHomeClient` client shell, create dialog shows room ID preview, rename pre-fills name, delete redirects to `/editor` if active workspace
 - `08-editor-workspace-shell.md` — `/editor/[roomId]` server component with Clerk access checks, `lib/project-access.ts` helpers, `AccessDenied` component, workspace layout with project name navbar, share/AI sidebar toggles, canvas placeholder, highlighted active project in sidebar
+- `09-share-dialog.md` — share dialog from workspace navbar: owner invite/remove/copy-link flows, collaborator read-only list, `GET/POST/DELETE /api/projects/[projectId]/collaborators`, Clerk Backend API enrichment for display names and avatars, `lib/collaborators.ts`, `useShareDialog` hook
 
 ## In Progress
 
@@ -58,3 +59,5 @@ Update this file whenever the current phase, active feature, or implementation s
 - `lib/project-access.ts` provides `getCurrentClerkIdentity()` and `getProjectAccess()` for server-side workspace authorization
 - `/editor/[roomId]` redirects unauthenticated users to `/sign-in`; missing or unauthorized projects render `AccessDenied`
 - Workspace shell: navbar shows project name + share/AI toggles, canvas placeholder fills viewport, AI sidebar is a slide-over placeholder
+- Share dialog: owners invite/remove collaborators and copy workspace link; collaborators get read-only list; Clerk Backend API enriches emails with display name and avatar when available
+- `lib/collaborators.ts` handles collaborator list/invite/remove with owner enforcement and Clerk user lookup
