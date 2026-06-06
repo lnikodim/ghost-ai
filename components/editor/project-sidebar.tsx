@@ -37,8 +37,15 @@ interface ProjectItemProps {
 function ProjectItem({ project, isActive, onClose, onRename, onDelete }: ProjectItemProps) {
   return (
     <div
-      className={cn('group flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-elevated', isActive && 'bg-elevated')}
+      className={cn(
+        'group flex items-center gap-2.5 rounded-xl border px-3 py-2 transition-colors',
+        isActive ? 'border-brand/35 bg-accent-dim' : 'border-transparent hover:border-surface-border hover:bg-elevated',
+      )}
     >
+      <span
+        aria-hidden="true"
+        className={cn('size-1.5 shrink-0 rounded-full', isActive ? 'bg-brand' : 'bg-copy-faint/60')}
+      />
       <Link
         href={`/editor/${project.id}`}
         onClick={onClose}
@@ -105,8 +112,8 @@ export function ProjectSidebar({
       <aside
         aria-hidden={!isOpen}
         className={cn(
-          'fixed top-12 left-0 z-50 flex h-[calc(100dvh-3rem)] w-72 flex-col border-r border-surface-border bg-surface/95 backdrop-blur-sm transition-transform duration-300 ease-in-out',
-          isOpen ? 'translate-x-0' : '-translate-x-full pointer-events-none',
+          'fixed top-15 bottom-3 left-3 z-50 flex w-72 flex-col overflow-hidden rounded-2xl border border-surface-border bg-surface/95 shadow-xl backdrop-blur-sm transition-transform duration-300 ease-in-out',
+          isOpen ? 'translate-x-0' : '-translate-x-[calc(100%+0.75rem)] pointer-events-none',
           className,
         )}
       >

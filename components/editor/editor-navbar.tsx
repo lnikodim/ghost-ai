@@ -1,7 +1,7 @@
 'use client';
 
 import { UserButton } from '@clerk/nextjs';
-import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Share2 } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, Share2, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -48,7 +48,12 @@ export function EditorNavbar({
       </div>
 
       <div className="flex flex-1 items-center justify-center px-3">
-        {projectName ? <h1 className="truncate text-sm font-medium text-copy-primary">{projectName}</h1> : null}
+        {projectName ? (
+          <div className="flex min-w-0 flex-col items-center text-center">
+            <h1 className="truncate text-sm font-medium text-copy-primary">{projectName}</h1>
+            <span className="text-xs text-copy-muted">Workspace</span>
+          </div>
+        ) : null}
       </div>
 
       <div className="flex flex-1 items-center justify-end gap-1 px-3">
@@ -62,12 +67,16 @@ export function EditorNavbar({
               <Button
                 type="button"
                 variant="ghost"
-                size="icon-sm"
+                size="sm"
                 aria-expanded={isAiSidebarOpen}
                 aria-label={isAiSidebarOpen ? 'Close AI sidebar' : 'Open AI sidebar'}
+                className={cn(
+                  isAiSidebarOpen && 'bg-brand text-primary-foreground hover:bg-brand/90 hover:text-primary-foreground',
+                )}
                 onClick={onToggleAiSidebar}
               >
-                {isAiSidebarOpen ? <PanelRightClose className="h-5 w-5" /> : <PanelRightOpen className="h-5 w-5" />}
+                <Sparkles className="h-4 w-4" />
+                AI
               </Button>
             ) : null}
           </>

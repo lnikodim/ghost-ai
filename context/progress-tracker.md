@@ -22,6 +22,9 @@ Update this file whenever the current phase, active feature, or implementation s
 - `07-wire-editor-home.md` — editor home wired to real project data: `lib/projects.ts` server-side data helper, `useProjectActions` hook with real API calls and navigation, server component page fetching owned + shared projects, `EditorHomeClient` client shell, create dialog shows room ID preview, rename pre-fills name, delete redirects to `/editor` if active workspace
 - `08-editor-workspace-shell.md` — `/editor/[roomId]` server component with Clerk access checks, `lib/project-access.ts` helpers, `AccessDenied` component, workspace layout with project name navbar, share/AI sidebar toggles, canvas placeholder, highlighted active project in sidebar
 - `09-share-dialog.md` — share dialog from workspace navbar: owner invite/remove/copy-link flows, collaborator read-only list, `GET/POST/DELETE /api/projects/[projectId]/collaborators`, Clerk Backend API enrichment for display names and avatars, `lib/collaborators.ts`, `useShareDialog` hook
+- `10-liveblocks-setup.md` — Liveblocks infrastructure: typed `liveblocks.config.ts` (Presence + UserMeta), cached `@liveblocks/node` client in `lib/liveblocks.ts`, deterministic cursor color helper, `POST /api/liveblocks-auth` with Clerk auth, project access checks, room creation, and session tokens with user metadata
+- `11-base-canvas.md` — Liveblocks-backed React Flow canvas: `CanvasRoom` wrapper with provider/suspense/error boundary, `Canvas` with `useLiveblocksFlow`, shared types in `types/canvas.ts`, dot background, MiniMap, loose connections, and `fitView`
+- `12-shape-panel.md` — bottom shape panel with draggable shape buttons, drag payload with shape and default size, canvas drop handling with `screenToFlowPosition`, node ID generation, `CanvasNode` renderer, and `canvasNode` type registration
 
 ## In Progress
 
@@ -41,6 +44,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Session Notes
 
+- UI polish pass: floating sidebars, dark-themed React Flow/MiniMap, Liveblocks `Cursors`, AI sidebar placeholder, active project styling, Liveblocks dark CSS imports
 - Editor home screen shows centered heading + description + New Project button (no card wrapper)
 - `useProjectDialogs` hook owns all dialog/form/loading state; slug derived from name via `toSlug()` helper
 - Sidebar project items use `DropdownMenuTrigger` with `buttonVariants` styling (base-ui doesn't support `asChild`)
@@ -61,3 +65,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - Workspace shell: navbar shows project name + share/AI toggles, canvas placeholder fills viewport, AI sidebar is a slide-over placeholder
 - Share dialog: owners invite/remove collaborators and copy workspace link; collaborators get read-only list; Clerk Backend API enriches emails with display name and avatar when available
 - `lib/collaborators.ts` handles collaborator list/invite/remove with owner enforcement and Clerk user lookup
+- Liveblocks room ID matches project ID; `lib/liveblocks.ts` caches the node client and maps user IDs to a fixed cursor color palette
+- `POST /api/liveblocks-auth` verifies Clerk auth and project membership before calling `getOrCreateRoom`/`updateRoom` and issuing ID tokens with name, avatar, and cursor color
+- Canvas uses `useLiveblocksFlow` with empty initial nodes/edges; `types/canvas.ts` defines `canvasNode`/`canvasEdge` types plus node color and shape palettes
+- Shape panel: floating pill toolbar at bottom-center with draggable Lucide icons for all six shapes; drop creates `canvasNode` nodes via Liveblocks-synced `onNodesChange` add; `CanvasNode` renders a bordered rectangle with centered label (shape-specific visuals deferred)

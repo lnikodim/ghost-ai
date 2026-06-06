@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+@import '@liveblocks/react-ui/styles.css';
+@import '@liveblocks/react-ui/styles/dark/attributes.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -161,4 +163,48 @@
   html {
     @apply font-sans;
   }
+}
+
+/* Liveblocks — match Ghost design tokens */
+.lb-root {
+  --lb-accent: var(--accent-primary);
+  --lb-background: var(--bg-surface);
+  --lb-foreground: var(--text-primary);
+  --lb-foreground-secondary: var(--text-muted);
+  --lb-border: var(--border-default);
+  --lb-radius: 0.75rem;
+}
+
+.lb-portal {
+  z-index: 60;
+}
+
+/* React Flow — dark canvas theme */
+.react-flow {
+  --xy-edge-stroke-default: var(--border-subtle);
+  --xy-edge-stroke-selected-default: var(--accent-primary);
+  --xy-connectionline-stroke-default: var(--border-subtle);
+  --xy-minimap-background-color-default: var(--bg-surface);
+  --xy-minimap-mask-background-color-default: rgba(8, 8, 9, 0.75);
+  --xy-minimap-node-background-color-default: var(--bg-subtle);
+  --xy-background-color-default: var(--bg-base);
+  --xy-background-pattern-dots-color-default: var(--border-subtle);
+  --xy-node-border-default: 1px solid var(--border-default);
+  --xy-node-background-color-default: var(--bg-elevated);
+  --xy-handle-background-color-default: var(--text-primary);
+  --xy-handle-border-color-default: var(--bg-base);
+  --xy-selection-background-color-default: rgba(0, 200, 212, 0.1);
+  --xy-selection-border-default: 1px dotted var(--accent-primary);
+}
+
+.react-flow__minimap {
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  border-radius: 0.75rem;
+  background-color: var(--bg-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.react-flow__attribution {
+  display: none;
 }
