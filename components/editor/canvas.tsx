@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, type DragEvent } from 'react';
+import { useCallback, useEffect, useState, type DragEvent } from 'react';
 import {
   Background,
   BackgroundVariant,
@@ -15,14 +15,17 @@ import '@xyflow/react/dist/style.css';
 import '@liveblocks/react-flow/styles.css';
 
 import { CanvasNode as CanvasNodeComponent } from '@/components/editor/canvas-node';
+import { ShapeDragPreview, type ShapeDragPreviewState } from '@/components/editor/shape-drag-preview';
 import { ShapePanel } from '@/components/editor/shape-panel';
 import {
   createCanvasNodeId,
   DEFAULT_NODE_COLOR,
   parseShapeDragPayload,
+  SHAPE_DEFAULT_SIZES,
   SHAPE_DRAG_MIME,
   type CanvasEdge,
   type CanvasNode,
+  type NodeShape,
 } from '@/types/canvas';
 
 const nodeTypes = {
@@ -39,6 +42,46 @@ function CanvasFlow() {
   );
 
   const { screenToFlowPosition } = useReactFlow();
+  const [dragPreview, setDragPreview] = useState<ShapeDragPreviewState | null>(null);
+
+  const handleShapeDragStart = useCallback((shape: NodeShape, event: DragEvent<HTMLButtonElement>) => {
+    const size = SHAPE_DEFAULT_SIZES[shape];
+    setDragPreview({
+      shape,
+      width: size.width,
+      height: size.height,
+      x: event.clientX,
+      y: event.clientY,
+    });
+  }, []);
+
+  const clearDragPreview = useCallback(() => {
+    setDragPreview(null);
+  }, []);
+
+  useEffect(() => {
+    if (!dragPreview) {
+      return;
+    }
+
+    function handleDocumentDragOver(event: globalThis.DragEvent) {
+      setDragPreview((current) =>
+        current
+          ? {
+              ...current,
+              x: event.clientX,
+              y: event.clientY,
+            }
+          : null,
+      );
+    }
+
+    document.addEventListener('dragover', handleDocumentDragOver);
+
+    return () => {
+      document.removeEventListener('dragover', handleDocumentDragOver);
+    };
+  }, [dragPreview !== null]);
 
   const handleDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
     if (!event.dataTransfer.types.includes(SHAPE_DRAG_MIME)) {
@@ -85,8 +128,9 @@ function CanvasFlow() {
           item: newNode,
         },
       ]);
+      clearDragPreview();
     },
-    [onNodesChange, screenToFlowPosition],
+    [clearDragPreview, onNodesChange, screenToFlowPosition],
   );
 
   return (
@@ -118,7 +162,8 @@ function CanvasFlow() {
           style={{ bottom: 72, right: 12, width: 140, height: 96 }}
         />
       </ReactFlow>
-      <ShapePanel />
+      <ShapePanel onShapeDragStart={handleShapeDragStart} onShapeDragEnd={clearDragPreview} />
+      {dragPreview ? <ShapeDragPreview preview={dragPreview} /> : null}
     </div>
   );
 }

@@ -25,6 +25,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - `10-liveblocks-setup.md` — Liveblocks infrastructure: typed `liveblocks.config.ts` (Presence + UserMeta), cached `@liveblocks/node` client in `lib/liveblocks.ts`, deterministic cursor color helper, `POST /api/liveblocks-auth` with Clerk auth, project access checks, room creation, and session tokens with user metadata
 - `11-base-canvas.md` — Liveblocks-backed React Flow canvas: `CanvasRoom` wrapper with provider/suspense/error boundary, `Canvas` with `useLiveblocksFlow`, shared types in `types/canvas.ts`, dot background, MiniMap, loose connections, and `fitView`
 - `12-shape-panel.md` — bottom shape panel with draggable shape buttons, drag payload with shape and default size, canvas drop handling with `screenToFlowPosition`, node ID generation, `CanvasNode` renderer, and `canvasNode` type registration
+- `13-node-shape.md` — shape-specific node rendering via shared `NodeShape` component (CSS for rectangle/pill/circle, SVG for diamond/hexagon/cylinder), selected-state borders, and cursor-attached ghost drag preview from the shape panel
 
 ## In Progress
 
@@ -68,4 +69,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - Liveblocks room ID matches project ID; `lib/liveblocks.ts` caches the node client and maps user IDs to a fixed cursor color palette
 - `POST /api/liveblocks-auth` verifies Clerk auth and project membership before calling `getOrCreateRoom`/`updateRoom` and issuing ID tokens with name, avatar, and cursor color
 - Canvas uses `useLiveblocksFlow` with empty initial nodes/edges; `types/canvas.ts` defines `canvasNode`/`canvasEdge` types plus node color and shape palettes
-- Shape panel: floating pill toolbar at bottom-center with draggable Lucide icons for all six shapes; drop creates `canvasNode` nodes via Liveblocks-synced `onNodesChange` add; `CanvasNode` renders a bordered rectangle with centered label (shape-specific visuals deferred)
+- Shape panel: floating pill toolbar at bottom-center with draggable Lucide icons for all six shapes; drop creates `canvasNode` nodes via Liveblocks-synced `onNodesChange` add
+- `NodeShape` renders each shape variant: CSS borders/radius for rectangle, pill, and circle; inline SVG polygons/ellipses for diamond, hexagon, and cylinder; borders use `--border-subtle` at rest and `--accent-primary` when selected
+- Shape drag preview: transparent native drag image, custom `ShapeDragPreview` ghost follows cursor with default size/color, cleared on drop or drag end
+- Prisma Postgres: `lib/prisma.ts` rewrites pooled URLs to direct TCP (`db.prisma.io`), uses a cached `pg.Pool`, and retries transient cold-start connection failures
