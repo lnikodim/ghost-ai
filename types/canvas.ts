@@ -24,6 +24,10 @@ export interface ShapeSize {
   height: number;
 }
 
+export const NODE_MIN_WIDTH = 48;
+export const NODE_MIN_HEIGHT = 32;
+export const NODE_LABEL_PLACEHOLDER = 'Label';
+
 export const SHAPE_DEFAULT_SIZES: Record<NodeShape, ShapeSize> = {
   rectangle: { width: 160, height: 80 },
   diamond: { width: 120, height: 120 },

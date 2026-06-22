@@ -26,6 +26,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - `11-base-canvas.md` — Liveblocks-backed React Flow canvas: `CanvasRoom` wrapper with provider/suspense/error boundary, `Canvas` with `useLiveblocksFlow`, shared types in `types/canvas.ts`, dot background, MiniMap, loose connections, and `fitView`
 - `12-shape-panel.md` — bottom shape panel with draggable shape buttons, drag payload with shape and default size, canvas drop handling with `screenToFlowPosition`, node ID generation, `CanvasNode` renderer, and `canvasNode` type registration
 - `13-node-shape.md` — shape-specific node rendering via shared `NodeShape` component (CSS for rectangle/pill/circle, SVG for diamond/hexagon/cylinder), selected-state borders, and cursor-attached ghost drag preview from the shape panel
+- `14-node-editing.md` — selected-node resize handles with minimum size constraints, double-click inline label editing with centered placeholder, live label sync via `updateNodeData`, and `nodrag`/`nopan`/`nowheel` on the edit textarea
 
 ## In Progress
 
@@ -72,4 +73,5 @@ Update this file whenever the current phase, active feature, or implementation s
 - Shape panel: floating pill toolbar at bottom-center with draggable Lucide icons for all six shapes; drop creates `canvasNode` nodes via Liveblocks-synced `onNodesChange` add
 - `NodeShape` renders each shape variant: CSS borders/radius for rectangle, pill, and circle; inline SVG polygons/ellipses for diamond, hexagon, and cylinder; borders use `--border-subtle` at rest and `--accent-primary` when selected
 - Shape drag preview: transparent native drag image, custom `ShapeDragPreview` ghost follows cursor with default size/color, cleared on drop or drag end
+- Node editing: `NodeResizer` on selected nodes (min 48×32), subtle dark-theme resize handles in `globals.css`; double-click label area opens centered textarea overlay; labels sync through React Flow `updateNodeData` into Liveblocks `onNodesChange`; `NodeShape` shows centered `Label` placeholder when empty
 - Prisma Postgres: `lib/prisma.ts` rewrites pooled URLs to direct TCP (`db.prisma.io`), uses a cached `pg.Pool`, and retries transient cold-start connection failures

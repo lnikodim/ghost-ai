@@ -12,6 +12,7 @@ interface NodeShapeProps {
   height: number;
   fill: string;
   label?: string;
+  placeholder?: string;
   selected?: boolean;
   className?: string;
 }
@@ -20,24 +21,42 @@ function getBorderColor(selected: boolean): string {
   return selected ? BORDER_SELECTED : BORDER_REST;
 }
 
-function NodeLabel({ label, textColor }: { label: string; textColor: string }) {
-  return (
-    <span className="px-2 text-center text-sm" style={{ color: textColor }}>
-      {label}
-    </span>
-  );
+function NodeLabelContent({
+  label,
+  placeholder,
+  textColor,
+}: {
+  label?: string;
+  placeholder?: string;
+  textColor: string;
+}) {
+  if (label) {
+    return (
+      <span className="px-2 text-center text-sm" style={{ color: textColor }}>
+        {label}
+      </span>
+    );
+  }
+
+  if (placeholder) {
+    return <span className="px-2 text-center text-sm text-copy-faint">{placeholder}</span>;
+  }
+
+  return null;
 }
 
 function SvgShapeFrame({
   width,
   height,
   label,
+  placeholder,
   textColor,
   children,
 }: {
   width: number;
   height: number;
   label?: string;
+  placeholder?: string;
   textColor: string;
   children: ReactNode;
 }) {
@@ -46,9 +65,9 @@ function SvgShapeFrame({
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="block" aria-hidden>
         {children}
       </svg>
-      {label ? (
+      {label || placeholder ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <NodeLabel label={label} textColor={textColor} />
+          <NodeLabelContent label={label} placeholder={placeholder} textColor={textColor} />
         </div>
       ) : null}
     </div>
@@ -126,6 +145,7 @@ function CssNodeShape({
   height,
   fill,
   label,
+  placeholder,
   textColor,
   borderColor,
   className,
@@ -135,6 +155,7 @@ function CssNodeShape({
   height: number;
   fill: string;
   label?: string;
+  placeholder?: string;
   textColor: string;
   borderColor: string;
   className?: string;
@@ -151,12 +172,21 @@ function CssNodeShape({
         borderColor,
       }}
     >
-      {label ? <NodeLabel label={label} textColor={textColor} /> : null}
+      <NodeLabelContent label={label} placeholder={placeholder} textColor={textColor} />
     </div>
   );
 }
 
-export function NodeShape({ shape, width, height, fill, label, selected = false, className }: NodeShapeProps) {
+export function NodeShape({
+  shape,
+  width,
+  height,
+  fill,
+  label,
+  placeholder,
+  selected = false,
+  className,
+}: NodeShapeProps) {
   const textColor = getNodeTextColor(fill);
   const borderColor = getBorderColor(selected);
 
@@ -168,6 +198,7 @@ export function NodeShape({ shape, width, height, fill, label, selected = false,
         height={height}
         fill={fill}
         label={label}
+        placeholder={placeholder}
         textColor={textColor}
         borderColor={borderColor}
         className={className}
@@ -178,7 +209,7 @@ export function NodeShape({ shape, width, height, fill, label, selected = false,
   const svgProps = { width, height, fill, stroke: borderColor };
 
   return (
-    <SvgShapeFrame width={width} height={height} label={label} textColor={textColor}>
+    <SvgShapeFrame width={width} height={height} label={label} placeholder={placeholder} textColor={textColor}>
       {shape === 'diamond' ? <DiamondShape {...svgProps} /> : null}
       {shape === 'hexagon' ? <HexagonShape {...svgProps} /> : null}
       {shape === 'cylinder' ? <CylinderShape {...svgProps} /> : null}
